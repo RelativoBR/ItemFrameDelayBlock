@@ -1,0 +1,7 @@
+name: BrasilCraftCustomPlugin
+author: BrasilCraft
+main: com.brasilcraft.BrasilCraftCustomPlugin
+website: https://github.com/RelativoBR/BrasilCraftCustomPlugin
+api-version: 1.17
+version: ${project.version}
+softdepend: []
