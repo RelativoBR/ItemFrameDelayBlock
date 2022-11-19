@@ -1,6 +1,6 @@
 package com.brasilcraft.listeners;
 
-import com.brasilcraft.managers.PlayerManager;
+import com.brasilcraft.BrasilCraftCustomPlugin;
 import com.brasilcraft.managers.PlayerData;
 import com.brasilcraft.utils.ActionUtils;
 import org.bukkit.Bukkit;
@@ -19,11 +19,14 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
+
 public class PlayerEventsListener implements Listener {
 
-    private PlayerManager playerManager;
+    private final BrasilCraftCustomPlugin plugin;
 
-    public PlayerEventsListener() {
+    public PlayerEventsListener(BrasilCraftCustomPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -37,6 +40,29 @@ public class PlayerEventsListener implements Listener {
         }
         if(block == null){
             return;
+        }
+
+        if(block.getType() == Material.ITEM_FRAME || block.getType() == Material.GLOW_ITEM_FRAME){
+            String eventNameItemFrame = "interactItemFrame";
+            System.out.println("frame-onBlockInteract");
+
+            PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
+            if(playerData == null || playerData.notHasInEventData(eventNameItemFrame)){
+                System.out.println("Player [" + player.getDisplayName() + "] gerando evento de bloqueio ItemFrame 3 segundos");
+                plugin.getPlayerManager().updatePlayerData(player, eventNameItemFrame);
+                return;
+            }
+
+            if(LocalDateTime.now().minusSeconds(3).isAfter(playerData.getLastTime())){
+                System.out.println("Player [" + player.getDisplayName() + "] removendo evento de bloqueio ItemFrame 3 segundos");
+                plugin.getPlayerManager().removeEventPlayerData(player, eventNameItemFrame);
+                return;
+            }
+
+            player.sendMessage("Precisa esperar 3 segundos para interagir com a moldura!");
+            System.out.println("Player [" + player.getDisplayName() + "] tentou interagir com a ItemFrame muito rápido");
+            event.setCancelled(true);
+
         }
 
     }
@@ -53,25 +79,32 @@ public class PlayerEventsListener implements Listener {
         }
 
         if(entity instanceof ItemFrame){
-            System.out.println("frame");
+            String eventNameItemFrame = "interactItemFrame";
+            System.out.println("frame-onEntityInteract");
             ItemFrame itemFrame = (ItemFrame) entity;
             ItemStack item = itemFrame.getItem();
             Material air = Material.AIR;
 
             if(item.getType() != air){
 
-                PlayerData playerData = playerManager.getPlayerData(player);
-                if(playerData == null){
+                PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
+                if(playerData == null || playerData.notHasInEventData(eventNameItemFrame)){
+                    System.out.println("Player [" + player.getDisplayName() + "] gerando evento de bloqueio ItemFrame 3 segundos");
+                    plugin.getPlayerManager().updatePlayerData(player, eventNameItemFrame);
                     return;
                 }
 
-                //playerData.getEventData()
+                if(LocalDateTime.now().minusSeconds(3).isAfter(playerData.getLastTime())){
+                    System.out.println("Player [" + player.getDisplayName() + "] removendo evento de bloqueio ItemFrame 3 segundos");
+                    plugin.getPlayerManager().removeEventPlayerData(player, eventNameItemFrame);
+                    return;
+                }
 
-                String itemName = item.getItemMeta() != null ? item.getItemMeta().getDisplayName() : item.getType().toString();
+                String itemName = item.getItemMeta() != null && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : item.getType().toString();
                 player.sendMessage("Precisa esperar 3 segundos para incluir outro item ["+itemName+"] na moldura!");
-                System.out.println("Player [" + player.getDisplayName() + "] usou uma moldura muito rápido com item [" + itemName + "]");
+                System.out.println("Player [" + player.getDisplayName() + "] usou uma ItemFrame muito rápido [" + itemName + "]");
+                event.setCancelled(true);
 
-                ActionUtils.cancelEvent(event);
             }
         }
 
@@ -82,6 +115,28 @@ public class PlayerEventsListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
+        if(block.getType() == Material.ITEM_FRAME || block.getType() == Material.GLOW_ITEM_FRAME){
+            String eventNameItemFrame = "interactItemFrame";
+            System.out.println("frame-onBlockPlace");
+
+            PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
+            if(playerData == null || playerData.notHasInEventData(eventNameItemFrame)){
+                System.out.println("Player [" + player.getDisplayName() + "] gerando evento de bloqueio ItemFrame 3 segundos");
+                plugin.getPlayerManager().updatePlayerData(player, eventNameItemFrame);
+                return;
+            }
+
+            if(LocalDateTime.now().minusSeconds(3).isAfter(playerData.getLastTime())){
+                System.out.println("Player [" + player.getDisplayName() + "] removendo evento de bloqueio ItemFrame 3 segundos");
+                plugin.getPlayerManager().removeEventPlayerData(player, eventNameItemFrame);
+                return;
+            }
+
+            player.sendMessage("Precisa esperar 3 segundos para colocar a moldura!");
+            System.out.println("Player [" + player.getDisplayName() + "] tentou colocar ItemFrame muito rápido");
+            event.setCancelled(true);
+
+        }
 
     }
 
@@ -90,6 +145,28 @@ public class PlayerEventsListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
+        if(block.getType() == Material.ITEM_FRAME || block.getType() == Material.GLOW_ITEM_FRAME){
+            String eventNameItemFrame = "interactItemFrame";
+            System.out.println("frame-onBlockBreak");
+
+                PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
+                if(playerData == null || playerData.notHasInEventData(eventNameItemFrame)){
+                    System.out.println("Player [" + player.getDisplayName() + "] gerando evento de bloqueio ItemFrame 3 segundos");
+                    plugin.getPlayerManager().updatePlayerData(player, eventNameItemFrame);
+                    return;
+                }
+
+                if(LocalDateTime.now().minusSeconds(3).isAfter(playerData.getLastTime())){
+                    System.out.println("Player [" + player.getDisplayName() + "] removendo evento de bloqueio ItemFrame 3 segundos");
+                    plugin.getPlayerManager().removeEventPlayerData(player, eventNameItemFrame);
+                    return;
+                }
+
+                player.sendMessage("Precisa esperar 3 segundos para quebrar a moldura!");
+                System.out.println("Player [" + player.getDisplayName() + "] tentou quebrar ItemFrame muito rápido");
+                event.setCancelled(true);
+
+        }
 
     }
 

@@ -16,8 +16,9 @@ public class BrasilCraftCustomPlugin extends JavaPlugin {
 
 	public void onEnable(){
 
-		this.playerManager =  new PlayerManager(this);
-		registerEvents();
+		this.playerManager =  new PlayerManager();
+
+		this.registerEvents();
 
         Bukkit.getConsoleSender().sendMessage(MessagesManager.getColoredMessage(prefix+" &eThanks for using my plugin!   &f~BrasilCraft"));
 
@@ -25,8 +26,8 @@ public class BrasilCraftCustomPlugin extends JavaPlugin {
 
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerEventsListener(), this);
-		pm.registerEvents(new ItemEventsListener(), this);
+		pm.registerEvents(new PlayerEventsListener(this), this);
+		pm.registerEvents(new ItemEventsListener(this), this);
 
 	}
 
