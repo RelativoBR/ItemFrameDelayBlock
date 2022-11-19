@@ -1,7 +1,7 @@
-name: ItemDelayBlock
+name: ItemFrameDelayBlock
 author: BrasilCraft
-main: com.github.relativobr.ItemDelayBlock
-website: https://github.com/RelativoBR/ItemDelayBlock
-api-version: 1.17
+main: com.github.relativobr.ItemFrameDelayBlock
+website: https://github.com/RelativoBR/ItemFrameDelayBlock
+api-version: 1.16
 version: ${project.version}
 softdepend: []

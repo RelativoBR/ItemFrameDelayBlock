@@ -1,6 +1,6 @@
 package com.github.relativobr.listeners;
 
-import com.github.relativobr.ItemDelayBlock;
+import com.github.relativobr.ItemFrameDelayBlock;
 import com.github.relativobr.model.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -17,29 +17,11 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 
 public class EventsListener implements Listener {
-    /*
-    //todo BUG
-    [14:30:59 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onHangingBreakByEntityEvent
-    [14:30:59 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-    [14:30:59 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onEntityDamageByEntityEvent
-    [14:30:59 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-    [14:30:59 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onHangingBreakByEntityEvent
-    [14:30:59 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-    [14:31:00 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onHangingBreakByEntityEvent
-    [14:31:00 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-    [14:31:00 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onHangingBreakByEntityEvent
-    [14:31:00 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-    [14:31:00 INFO]: [ItemDelayBlock] interactEvent-ItemFrame->onHangingBreakByEntityEvent
-    [14:31:00 INFO]: [ItemDelayBlock] Player [RelativoBR] new event interactEvent-ItemFrame(notHasInEventData)
-     */
-    private static final String INTERACT_EVENT_ITEM_FRAME = "interactEvent-ItemFrame";
-
-    public EventsListener(ItemDelayBlock plugin) {
+    public EventsListener(ItemFrameDelayBlock plugin) {
         this.plugin = plugin;
     }
 
-    private final ItemDelayBlock plugin;
-
+    private final ItemFrameDelayBlock plugin;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
@@ -47,14 +29,14 @@ public class EventsListener implements Listener {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
 
-        if (plugin.getDelayItemFrame() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
+        if (plugin.getDelayTime() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
                 || entity.getType().equals(EntityType.GLOW_ITEM_FRAME))) {
 
-            this.plugin.log(Level.INFO, INTERACT_EVENT_ITEM_FRAME + "->onPlayerInteractEntityEvent");
+            this.plugin.log(Level.INFO, "onPlayerInteractEntityEvent");
 
-            if (checkDelayEventType(player, INTERACT_EVENT_ITEM_FRAME)) {
+            if (checkDelayEventType(player)) {
                 event.setCancelled(true);
-                this.sendMessageInfoEvent(player, this.plugin.getInfoItemFrame());
+                this.sendMessageInfoEvent(player, this.plugin.getNotificationMessage());
             }
 
         }
@@ -72,14 +54,14 @@ public class EventsListener implements Listener {
         Player player = (Player) event.getRemover();
         Entity entity = event.getEntity();
 
-        if (plugin.getDelayItemFrame() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
+        if (plugin.getDelayTime() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
                 || entity.getType().equals(EntityType.GLOW_ITEM_FRAME))) {
 
-            this.plugin.log(Level.INFO, INTERACT_EVENT_ITEM_FRAME + "->onHangingBreakByEntityEvent");
+            this.plugin.log(Level.INFO, "onHangingBreakByEntityEvent");
 
-            if (checkDelayEventType(player, INTERACT_EVENT_ITEM_FRAME)) {
+            if (checkDelayEventType(player)) {
                 event.setCancelled(true);
-                this.sendMessageInfoEvent(player, this.plugin.getInfoItemFrame());
+                this.sendMessageInfoEvent(player, this.plugin.getNotificationMessage());
             }
 
         }
@@ -91,24 +73,24 @@ public class EventsListener implements Listener {
 
         Entity entity = event.getEntity();
 
-        if (plugin.getDelayItemFrame() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
+        if (plugin.getDelayTime() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
                 || entity.getType().equals(EntityType.GLOW_ITEM_FRAME))) {
 
-            this.plugin.log(Level.INFO, INTERACT_EVENT_ITEM_FRAME + "->onEntityDamageByEntityEvent");
+            this.plugin.log(Level.INFO, "onEntityDamageByEntityEvent");
 
             if (event.getDamager() instanceof Player) {
                 Player player = (Player) event.getDamager();
-                if (checkDelayEventType(player, INTERACT_EVENT_ITEM_FRAME)) {
+                if (checkDelayEventType(player)) {
                     event.setCancelled(true);
-                    this.sendMessageInfoEvent(player, this.plugin.getInfoItemFrame());
+                    this.sendMessageInfoEvent(player, this.plugin.getNotificationMessage());
                 }
             }
             if (event.getDamager() instanceof Projectile && (((Projectile) event.getDamager()).getShooter() instanceof Player)) {
                 Player player = (Player) ((Projectile) event.getDamager()).getShooter();
-                if (checkDelayEventType(player, INTERACT_EVENT_ITEM_FRAME)) {
+                if (checkDelayEventType(player)) {
                     event.getDamager().remove();
                     event.setCancelled(true);
-                    this.sendMessageInfoEvent(player, this.plugin.getInfoItemFrame());
+                    this.sendMessageInfoEvent(player, this.plugin.getNotificationMessage());
                 }
             }
         }
@@ -124,48 +106,42 @@ public class EventsListener implements Listener {
             return;
         }
 
-        if (plugin.getDelayItemFrame() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
+        if (plugin.getDelayTime() > 0 && (entity.getType().equals(EntityType.ITEM_FRAME)
                 || entity.getType().equals(EntityType.GLOW_ITEM_FRAME))) {
 
-            this.plugin.log(Level.INFO, INTERACT_EVENT_ITEM_FRAME + "->onHangingPlaceEvent");
+            this.plugin.log(Level.INFO, "onHangingPlaceEvent");
 
-            if (checkDelayEventType(player, INTERACT_EVENT_ITEM_FRAME)) {
+            if (checkDelayEventType(player)) {
                 event.setCancelled(true);
-                this.sendMessageInfoEvent(player, this.plugin.getInfoItemFrame());
+                this.sendMessageInfoEvent(player, this.plugin.getNotificationMessage());
             }
         }
 
     }
 
-    private boolean checkDelayEventType(Player player, String typeEvent) {
+    private boolean checkDelayEventType(Player player) {
 
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
 
         if (playerData == null) {
-            this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] new event " + typeEvent + "(playerData null)");
-            plugin.getPlayerManager().addPlayerData(player, typeEvent);
+            this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] new event");
+            plugin.getPlayerManager().addPlayerData(player);
             return false;
         }
 
-        if (playerData.notHasInEventData(typeEvent)) {
-            this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] new event " + typeEvent + "(notHasInEventData)");
-            plugin.getPlayerManager().addPlayerData(player, typeEvent);
+        if (LocalDateTime.now().minusSeconds(plugin.getDelayTime()).isAfter(playerData.getTime())) {
+            this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] remove old event");
+            plugin.getPlayerManager().removePlayerData(playerData);
             return false;
         }
 
-        if (LocalDateTime.now().minusSeconds(plugin.getDelayItemFrame()).isAfter(playerData.getTimeFromEventData(typeEvent))) {
-            this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] remove old event " + typeEvent + "(time " + playerData.getTimeFromEventData(typeEvent) + ")");
-            plugin.getPlayerManager().removeEventPlayerData(player, typeEvent);
-            return false;
-        }
-
-        this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] block event " + typeEvent);
+        this.plugin.log(Level.INFO, "Player [" + player.getDisplayName() + "] block event ");
         return true;
     }
 
     private void sendMessageInfoEvent(Player player, String infoEvent) {
         player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + infoEvent);
-        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_HIT, 1, 1);
+        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
     }
 
 }
