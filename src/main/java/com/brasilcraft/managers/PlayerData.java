@@ -13,15 +13,10 @@ public class PlayerData {
     private String playerUUID;
     private String playerName;
     private LocalDateTime lastTime;
-    private Set<String> eventName;
+    private List<String> eventName;
 
     public boolean hasInEventData(String eventName){
-        for(String e : this.eventName){
-            if(e.equals(eventName)){
-                return true;
-            }
-        }
-        return false;
+        return this.eventName.contains(eventName);
     }
 
     public boolean notHasInEventData(String eventName){
@@ -30,7 +25,7 @@ public class PlayerData {
 
     public void addEventName(String event) {
         if(this.eventName == null){
-            this.eventName = new HashSet<>();
+            this.eventName = new ArrayList<>();
         }
         eventName.add(event);
     }

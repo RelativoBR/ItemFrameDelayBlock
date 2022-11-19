@@ -2,9 +2,7 @@ package com.brasilcraft.managers;
 
 import org.bukkit.entity.Player;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class PlayerManager {
 
@@ -27,10 +25,13 @@ public class PlayerManager {
         PlayerData p = getPlayerData(player);
 
         if (p == null) {
+            List<String> events = new ArrayList<>();
+            events.add(event);
+
             PlayerData build = PlayerData.builder()
                     .playerUUID(player.getUniqueId().toString())
                     .playerName(player.getName())
-                    .eventName(Collections.singleton(event))
+                    .eventName(events)
                     .lastTime(LocalDateTime.now()).build();
             this.playerData.putIfAbsent(player.getUniqueId().toString(), build);
 
