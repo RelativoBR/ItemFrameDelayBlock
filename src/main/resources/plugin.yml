@@ -1,7 +1,7 @@
-name: BrasilCraftCustomPlugin
+name: ItemDelayBlock
 author: BrasilCraft
-main: com.brasilcraft.BrasilCraftCustomPlugin
-website: https://github.com/RelativoBR/BrasilCraftCustomPlugin
+main: com.github.relativobr.ItemDelayBlock
+website: https://github.com/RelativoBR/ItemDelayBlock
 api-version: 1.17
 version: ${project.version}
 softdepend: []
