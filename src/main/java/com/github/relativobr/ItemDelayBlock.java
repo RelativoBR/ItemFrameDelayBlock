@@ -1,6 +1,6 @@
 package com.github.relativobr;
 
-import com.github.relativobr.core.Config;
+import com.github.relativobr.configuration.Config;
 import com.github.relativobr.listeners.EventsListener;
 import com.github.relativobr.managers.PlayerManager;
 import lombok.Getter;

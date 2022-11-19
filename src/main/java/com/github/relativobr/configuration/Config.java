@@ -1,4 +1,4 @@
-package com.github.relativobr.core;
+package com.github.relativobr.configuration;
 
 
 import org.bukkit.configuration.file.FileConfiguration;
