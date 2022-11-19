@@ -47,7 +47,7 @@ public class ItemEventsListener implements Listener {
                 return;
             }
 
-            if(LocalDateTime.now().minusSeconds(3).isAfter(playerData.getLastTime())){
+            if(LocalDateTime.now().minusSeconds(2).isAfter(playerData.getLastTime())){
                 System.out.println("Player [" + player.getDisplayName() + "] removendo evento de bloqueio ItemFrame 3 segundos");
                 plugin.getPlayerManager().removeEventPlayerData(player, eventNameItemFrame);
                 return;
