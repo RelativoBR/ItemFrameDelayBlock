@@ -3,6 +3,10 @@
 Plugin created to limit the use of some items during a configured time interval, with the intention of avoiding dupe of items by players
 
 
+## Download / Builds
+https://www.spigotmc.org/resources/item-frame-delay-block-simples-plugin.106348/
+
+
 ## Requirements
 
 Minecraft Version: 1.16+
