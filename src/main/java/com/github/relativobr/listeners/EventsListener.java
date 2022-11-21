@@ -140,7 +140,7 @@ public class EventsListener implements Listener {
     }
 
     private void sendMessageInfoEvent(Player player, String infoEvent) {
-        player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + infoEvent);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',infoEvent));
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
     }
 
